@@ -2,16 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WorkerScript : MonoBehaviour
+public class WorkerScript : Person
 {
-    Transform tableOrder;
+    //Transform tableOrder;
     enum State { Idle, GoingToTakeOrder, TakingOrder, WaitingToEat, GettingPaid, WaitingToLeave };
     State state;
 
-    float speed = 10f;
+    //float speed = 10f;
     // Start is called before the first frame update
     void Start()
     {
+        //transform = transform;
         state = 0;
     }
 
@@ -39,8 +40,8 @@ public class WorkerScript : MonoBehaviour
         }
 
     }
-    private void MoveTo(Transform target)
+    /*private void MoveTo(Transform target)
     {
         transform.position = Vector2.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
-    }
+    }*/
 }

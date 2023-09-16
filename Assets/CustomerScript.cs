@@ -3,19 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CustomerScript : MonoBehaviour
+public class CustomerScript : Person
 {
     Transform exit;
     //[SerializeField]
-    Transform tableOrder;
+    //Transform tableOrder;
     enum State { Idle,GoingToOrder,Ordering,Eating,Paying,Leaving};
     State state;
 
-    float speed = 10f;
+    //float speed = 10f;
 
     // Start is called before the first frame update
     void Start()
     {
+        //transform = GetComponent<Transform>;
         state = State.Idle;
         tableOrder = GameObject.Find("Table").transform.GetChild(0).transform.Find("CustomerPosition");
     }
@@ -52,8 +53,8 @@ public class CustomerScript : MonoBehaviour
         //notify worker
     }
 
-    private void MoveTo(Transform target)
+    /*private void MoveTo(Transform target)
     {
         transform.position = Vector2.MoveTowards(transform.position, target.position,speed*Time.deltaTime);
-    }
+    }*/
 }
