@@ -5,8 +5,8 @@ using UnityEngine;
 public class WorkerScript : Person
 {
     //Transform tableOrder;
-    enum State { Idle, GoingToTakeOrder, TakingOrder, WaitingToEat, GettingPaid, WaitingToLeave };
-    State state;
+    public enum State { Idle, GoingToTakeOrder, TakingOrder, WaitingToEat, GettingPaid, WaitingToLeave };
+    public State state;
 
     //float speed = 10f;
     // Start is called before the first frame update
@@ -14,12 +14,14 @@ public class WorkerScript : Person
     {
         //transform = transform;
         state = 0;
+
+        tableOrder = GameObject.Find("Table").transform.GetChild(0).transform.Find("WorkerPosition");
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        StateHandler();
     }
     private void StateHandler()
     {
@@ -44,4 +46,9 @@ public class WorkerScript : Person
     {
         transform.position = Vector2.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
     }*/
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log("Worker Collision");
+    }
 }
