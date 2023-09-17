@@ -8,8 +8,8 @@ public class CustomerScript : Person
     Transform exit;
     //[SerializeField]
     //Transform tableOrder;
-    enum State { Idle,GoingToOrder,Ordering,Eating,Paying,Leaving};
-    State state;
+    public enum State { Idle,GoingToOrder,Ordering,Eating,Paying,Leaving};
+    public State state;
 
     bool orderPosition = false;
 
@@ -21,6 +21,7 @@ public class CustomerScript : Person
         //transform = GetComponent<Transform>;
         state = State.Idle;
         tableOrder = GameObject.Find("Table").transform.GetChild(0).transform.Find("CustomerPosition");
+        exit = transform.parent;
     }
 
     // Update is called once per frame
@@ -45,6 +46,12 @@ public class CustomerScript : Person
                 break;
             case State.Ordering:
                 Order();
+                break;
+            case State.Eating:
+                state = State.Leaving;//temporary
+                break;
+            case State.Leaving:
+                MoveTo(exit);
                 break;
             default:
                 Debug.Log("State Error!");

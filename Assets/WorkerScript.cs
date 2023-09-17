@@ -5,10 +5,11 @@ using UnityEngine;
 public class WorkerScript : Person
 {
     //Transform tableOrder;
-    public enum State { Idle, GoingToTakeOrder, TakingOrder, WaitingToEat, GettingPaid, WaitingToLeave };
+    public enum State { Idle, GoingToTakeOrder, TakingOrder, Serving, GettingPaid, WaitingToLeave };
     public State state;
 
     //float speed = 10f;
+    Transform foodMachine;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,11 +17,14 @@ public class WorkerScript : Person
         state = 0;
 
         tableOrder = GameObject.Find("Table").transform.GetChild(0).transform.Find("WorkerPosition");
+
+        foodMachine= GameObject.Find("FoodMachine").transform.Find("WorkerPosition");
     }
 
     // Update is called once per frame
     void Update()
     {
+        Debug.Log(state);
         StateHandler();
     }
     private void StateHandler()
@@ -33,9 +37,12 @@ public class WorkerScript : Person
             case State.GoingToTakeOrder:
                 MoveTo(tableOrder);
                 break;
-            /*case State.Ordering:
-                Order();
-                break;*/
+            case State.TakingOrder:
+                MoveTo(foodMachine);
+                break;
+            case State.Serving:
+                MoveTo(tableOrder);
+                break;
             default:
                 Debug.Log("State Error!");
                 break;
@@ -50,5 +57,31 @@ public class WorkerScript : Person
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Debug.Log("Worker Collision");
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        Debug.Log("Worker Trigger" + collision.name);
+        //check parent of collision object
+        if (collision.transform.parent.name == "TableSlot" && state == State.GoingToTakeOrder)
+        {
+            state++;
+        }
+        else if (collision.transform.parent.name == "FoodMachine" && state == State.TakingOrder)
+        {
+            state++;
+        }
+        else if (collision.transform.parent.name == "TableSlot" && state == State.Serving)
+        {
+            state++;
+            EndOrder();
+        }
+    }
+
+    private void EndOrder()
+    {
+        //notify customer
+        CustomerScript customer = FindObjectOfType<CustomerScript>();
+        customer.state = CustomerScript.State.Eating;
     }
 }
