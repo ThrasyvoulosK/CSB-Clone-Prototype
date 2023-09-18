@@ -41,8 +41,8 @@ public class CustomerScript : Person
             case State.GoingToOrder:
                 MoveTo(tableOrder);
                 //CheckGoingToOrder();
-                if (tableOrder == transform)
-                    state++;
+                /*if (tableOrder == transform)
+                    state++;*/
                 break;
             case State.Ordering:
                 Order();
@@ -69,17 +69,30 @@ public class CustomerScript : Person
     {
         //notify worker
         WorkerScript worker = FindObjectOfType<WorkerScript>();
-        worker.state = WorkerScript.State.GoingToTakeOrder;
+        //contact worker only if they're idle
+        if (worker.state == WorkerScript.State.Idle)
+            worker.state = WorkerScript.State.GoingToTakeOrder;
+        else
+            Debug.Log("Worker not idle");
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    /*private void OnCollisionEnter2D(Collision2D collision)
     {
         Debug.Log("Customer Collision");
-    }
+    }*/
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Customer Trigger");
-        Order();
+        Debug.Log("Customer Trigger"+collision.name);
+        if(collision.transform.name=="SpawnArea")
+        {
+            if(state==State.Leaving)
+            {
+                Destroy(gameObject);
+            }
+            return;
+        }
+        else if(collision.transform.parent.name=="TableSlot"&&state==State.GoingToOrder)
+            Order();
     }
 
     /*private void MoveTo(Transform target)

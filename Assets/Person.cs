@@ -6,7 +6,7 @@ public class Person :MonoBehaviour
 {
     //public Transform transform;
     public Transform tableOrder;
-    public float speed = 10f;
+    public float speed = 1f;
 
     public void MoveTo(Transform target)
     {

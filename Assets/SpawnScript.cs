@@ -17,7 +17,9 @@ public class SpawnScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        //respawn child if the last one has finished its cycle
+        if (gameObject.transform.childCount == 0)
+            Spawn();
     }
 
     void Spawn()

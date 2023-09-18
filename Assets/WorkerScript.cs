@@ -43,6 +43,12 @@ public class WorkerScript : Person
             case State.Serving:
                 MoveTo(tableOrder);
                 break;
+            case State.GettingPaid://temporary
+                state++;
+                break;
+            case State.WaitingToLeave:
+                state=State.Idle;
+                break;
             default:
                 Debug.Log("State Error!");
                 break;
@@ -75,6 +81,15 @@ public class WorkerScript : Person
         {
             state++;
             EndOrder();
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        //if the worker is already inside their tableslot don't try to re-enter the collider
+        if (collision.transform.parent.name == "TableSlot" && state == State.GoingToTakeOrder)
+        {
+            state++;
         }
     }
 
