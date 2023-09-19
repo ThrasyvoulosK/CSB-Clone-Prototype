@@ -13,15 +13,18 @@ public class CustomerScript : Person
 
     bool orderPosition = false;
 
-    //float speed = 10f;
+    TableScript tableScript;
 
     // Start is called before the first frame update
     void Start()
     {
         //transform = GetComponent<Transform>;
         state = State.Idle;
-        tableOrder = GameObject.Find("Table").transform.GetChild(0).transform.Find("CustomerPosition");
+        //tableOrder = GameObject.Find("Table").transform.GetChild(0).transform.Find("CustomerPosition");
         exit = transform.parent;
+
+        tableScript = FindAnyObjectByType<TableScript>();
+        FindTable();
     }
 
     // Update is called once per frame
@@ -40,9 +43,6 @@ public class CustomerScript : Person
                 break;
             case State.GoingToOrder:
                 MoveTo(tableOrder);
-                //CheckGoingToOrder();
-                /*if (tableOrder == transform)
-                    state++;*/
                 break;
             case State.Ordering:
                 Order();
@@ -68,18 +68,26 @@ public class CustomerScript : Person
     private void Order()
     {
         //notify worker
-        WorkerScript worker = FindObjectOfType<WorkerScript>();
+        foreach(WorkerScript worker in tableScript.workers)
+        {
+            //contact worker only if they're idle
+            if (worker.state == WorkerScript.State.Idle)
+            { 
+                worker.state = WorkerScript.State.GoingToTakeOrder;
+                return;
+            }
+            else
+                Debug.Log("Worker not idle"); 
+        }
+        Debug.Log("Error! No Workers Available!");
+        //WorkerScript worker = FindObjectOfType<WorkerScript>();
         //contact worker only if they're idle
-        if (worker.state == WorkerScript.State.Idle)
+        /*if (worker.state == WorkerScript.State.Idle)
             worker.state = WorkerScript.State.GoingToTakeOrder;
         else
-            Debug.Log("Worker not idle");
+            Debug.Log("Worker not idle");*/
     }
 
-    /*private void OnCollisionEnter2D(Collision2D collision)
-    {
-        Debug.Log("Customer Collision");
-    }*/
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Debug.Log("Customer Trigger"+collision.name);
@@ -91,12 +99,24 @@ public class CustomerScript : Person
             }
             return;
         }
-        else if(collision.transform.parent.name=="TableSlot"&&state==State.GoingToOrder)
+        //else if(collision.transform.parent.name=="TableSlot"&&state==State.GoingToOrder)
+        else if(collision.transform.parent.name.Contains("TableSlot")&&state==State.GoingToOrder)
             Order();
     }
 
-    /*private void MoveTo(Transform target)
+    void FindTable()
     {
-        transform.position = Vector2.MoveTowards(transform.position, target.position,speed*Time.deltaTime);
-    }*/
+        foreach(TableSlotScript tableSlot in tableScript.tableSlots)
+        {
+            if(tableSlot.slotTaken==false)
+            {
+                tableOrder = tableSlot.transform;
+                tableSlot.slotTaken = true;
+                Debug.Log("Seat taken " + tableSlot.transform.name);
+                return;
+            }
+        }
+        Debug.Log("Error! No empty seats found!");
+        //tableOrder = GameObject.Find("Table").transform.GetChild(0).transform.Find("CustomerPosition");
+    }
 }

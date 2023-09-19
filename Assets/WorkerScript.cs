@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,23 +9,26 @@ public class WorkerScript : Person
     public enum State { Idle, GoingToTakeOrder, TakingOrder, Serving, GettingPaid, WaitingToLeave };
     public State state;
 
-    //float speed = 10f;
     Transform foodMachine;
+
+    TableScript tableScript;
     // Start is called before the first frame update
     void Start()
     {
         //transform = transform;
         state = 0;
 
-        tableOrder = GameObject.Find("Table").transform.GetChild(0).transform.Find("WorkerPosition");
+        //tableOrder = GameObject.Find("Table").transform.GetChild(0).transform.Find("WorkerPosition");
 
         foodMachine= GameObject.Find("FoodMachine").transform.Find("WorkerPosition");
+
+        tableScript = FindAnyObjectByType<TableScript>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(state);
+        //Debug.Log(state);
         StateHandler();
     }
     private void StateHandler()
@@ -35,6 +39,7 @@ public class WorkerScript : Person
             case State.Idle:
                 break;
             case State.GoingToTakeOrder:
+                FindTable();
                 MoveTo(tableOrder);
                 break;
             case State.TakingOrder:
@@ -55,14 +60,20 @@ public class WorkerScript : Person
         }
 
     }
-    /*private void MoveTo(Transform target)
-    {
-        transform.position = Vector2.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
-    }*/
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void FindTable()
     {
-        Debug.Log("Worker Collision");
+        foreach (TableSlotScript tableSlot in tableScript.tableSlots)
+        {
+            if (tableSlot.slotTaken == true)
+            {
+                tableOrder = tableSlot.transform;
+                tableSlot.slotTaken = false;
+                //Debug.Log("Seat taken " + tableSlot.transform.name);
+                return;
+            }
+        }
+        Debug.Log("Error! No empty seats found!");
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
