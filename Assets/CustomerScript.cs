@@ -15,6 +15,10 @@ public class CustomerScript : Person
 
     TableScript tableScript;
 
+    TableSlotScript seatTaken;
+
+    bool haveWorker = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -52,6 +56,7 @@ public class CustomerScript : Person
                 break;
             case State.Leaving:
                 MoveTo(exit);
+                seatTaken.slotTaken = false;
                 break;
             default:
                 Debug.Log("State Error!");
@@ -67,13 +72,29 @@ public class CustomerScript : Person
 
     private void Order()
     {
+        if (haveWorker == true)
+            return;
+
         //notify worker
         foreach(WorkerScript worker in tableScript.workers)
         {
             //contact worker only if they're idle
             if (worker.state == WorkerScript.State.Idle)
-            { 
+            {
+                //set worker's tableslot
+                //worker.tableOrder= seatTaken.transform.parent.transform.Find("WorkerPosition");
+                worker.tableOrder = seatTaken.transform;
+                Debug.Log("customer seat " + seatTaken.name);
+                Debug.Log("seat parent" + seatTaken.transform.parent.name);
+                Debug.Log("worker seat " + worker.tableOrder.name);
                 worker.state = WorkerScript.State.GoingToTakeOrder;
+                Debug.Log("Worker " + worker.name + " will work for " + transform.name);
+
+                //state = State.Ordering;
+                haveWorker = true;
+
+                worker.currentCustomer = transform.GetComponent<CustomerScript>();
+
                 return;
             }
             else
@@ -91,17 +112,36 @@ public class CustomerScript : Person
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Debug.Log("Customer Trigger"+collision.name);
-        if(collision.transform.name=="SpawnArea")
+        
+        if (collision.transform.name.Contains("SpawnArea"))
         {
-            if(state==State.Leaving)
+            if (state == State.Leaving)
             {
                 Destroy(gameObject);
             }
             return;
         }
-        //else if(collision.transform.parent.name=="TableSlot"&&state==State.GoingToOrder)
-        else if(collision.transform.parent.name.Contains("TableSlot")&&state==State.GoingToOrder)
-            Order();
+        else if (collision.transform.parent.name.Contains("TableSlot") && state == State.GoingToOrder)
+        {
+            Debug.Log("Customer " + transform.name + " collides with tableslot " + collision.name);
+            Debug.Log("seat name " + seatTaken.name);
+            if (collision.transform.parent.name == seatTaken.name)
+                state = State.Ordering;//Order();
+        }
+    }
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.transform.name.Contains("SpawnArea"))
+        {
+            if (state == State.Leaving)
+            {
+                Destroy(gameObject);
+            }
+            return;
+        }
+        if (collision.transform.parent.name.Contains("TableSlot") && state == State.GoingToOrder)
+            if (collision.transform.parent.name == seatTaken.name)
+                state = State.Ordering;//Order();
     }
 
     void FindTable()
@@ -110,8 +150,9 @@ public class CustomerScript : Person
         {
             if(tableSlot.slotTaken==false)
             {
-                tableOrder = tableSlot.transform;
+                tableOrder = tableSlot.transform.Find("CustomerPosition");
                 tableSlot.slotTaken = true;
+                seatTaken = tableSlot;
                 Debug.Log("Seat taken " + tableSlot.transform.name);
                 return;
             }
