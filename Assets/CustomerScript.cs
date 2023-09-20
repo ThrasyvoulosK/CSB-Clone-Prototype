@@ -19,6 +19,8 @@ public class CustomerScript : Person
 
     bool haveWorker = false;
 
+    public MachineScript foodMachine;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -74,6 +76,9 @@ public class CustomerScript : Person
     {
         if (haveWorker == true)
             return;
+
+        //choose food
+        ChooseFood();
 
         //notify worker
         foreach(WorkerScript worker in tableScript.workers)
@@ -159,5 +164,13 @@ public class CustomerScript : Person
         }
         Debug.Log("Error! No empty seats found!");
         //tableOrder = GameObject.Find("Table").transform.GetChild(0).transform.Find("CustomerPosition");
+    }
+
+    void ChooseFood()
+    {
+        int foodChoice = UnityEngine.Random.Range(0, tableScript.machines.Count);
+        Debug.Log(foodChoice);
+        foodMachine = tableScript.machines[foodChoice];
+        Debug.Log("Food Machine Chosen: " + foodMachine.transform.name);
     }
 }

@@ -621,6 +621,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 358906694}
+  - component: {fileID: 358906695}
   m_Layer: 0
   m_Name: FoodMachine (1)
   m_TagString: Untagged
@@ -645,6 +646,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &358906695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 358906693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17b3e1bf36cdd6249854f4ea1aa61f90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &399805713
 GameObject:
   m_ObjectHideFlags: 0
@@ -869,6 +882,10 @@ MonoBehaviour:
   - {fileID: 568702400}
   - {fileID: 177791952}
   - {fileID: 202292058}
+  machines:
+  - {fileID: 1501912942}
+  - {fileID: 358906695}
+  - {fileID: 1506813605}
 --- !u!1 &461162245
 GameObject:
   m_ObjectHideFlags: 0
@@ -2648,6 +2665,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1501912941}
+  - component: {fileID: 1501912942}
   m_Layer: 0
   m_Name: FoodMachine
   m_TagString: Untagged
@@ -2672,6 +2690,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1501912942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1501912940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17b3e1bf36cdd6249854f4ea1aa61f90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1506813603
 GameObject:
   m_ObjectHideFlags: 0
@@ -2681,6 +2711,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1506813604}
+  - component: {fileID: 1506813605}
   m_Layer: 0
   m_Name: FoodMachine (2)
   m_TagString: Untagged
@@ -2705,6 +2736,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1506813605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1506813603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17b3e1bf36cdd6249854f4ea1aa61f90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1534975062
 GameObject:
   m_ObjectHideFlags: 0

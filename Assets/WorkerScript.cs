@@ -22,7 +22,7 @@ public class WorkerScript : Person
 
         //tableOrder = GameObject.Find("Table").transform.GetChild(0).transform.Find("WorkerPosition");
 
-        foodMachine= GameObject.Find("FoodMachine").transform.Find("WorkerPosition");
+        //foodMachine= GameObject.Find("FoodMachine").transform.Find("WorkerPosition");
 
         tableScript = FindAnyObjectByType<TableScript>();
     }
@@ -49,6 +49,7 @@ public class WorkerScript : Person
                 MoveTo(tableOrder);
                 break;
             case State.TakingOrder:
+                foodMachine = currentCustomer.foodMachine.transform;
                 MoveTo(foodMachine);
                 break;
             case State.Serving:
@@ -89,11 +90,15 @@ public class WorkerScript : Person
     {
         Debug.Log("Worker Trigger" + collision.name);
         //check parent of collision object
+        if(state==State.Idle)
+        {
+            return;
+        }
         if (collision.transform.parent.name.Contains("TableSlot") && state == State.GoingToTakeOrder)
         {
             state++;
         }
-        else if (collision.transform.parent.name == "FoodMachine" && state == State.TakingOrder)
+        else if (collision.transform.parent.name == foodMachine.transform.name && state == State.TakingOrder)//"FoodMachine"
         {
             state++;
         }
