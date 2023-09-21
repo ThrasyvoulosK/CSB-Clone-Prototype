@@ -48,9 +48,11 @@ public class CustomerScript : Person
                 state = State.GoingToOrder;
                 break;
             case State.GoingToOrder:
+                //FindTable();
                 MoveTo(tableOrder);
                 break;
             case State.Ordering:
+                //StartCoroutine(Wait(1));
                 Order();
                 break;
             case State.Eating:

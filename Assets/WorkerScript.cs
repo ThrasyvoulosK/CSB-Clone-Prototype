@@ -35,10 +35,12 @@ public class WorkerScript : Person
     }
     private void StateHandler()
     {
+        Coroutine s = null;
         //throw new NotImplementedException();
         switch (state)
         {
             case State.Idle:
+                StopAllCoroutines();
                 tableOrder = null;
                 break;
             case State.GoingToTakeOrder:
@@ -49,11 +51,17 @@ public class WorkerScript : Person
                 MoveTo(tableOrder);
                 break;
             case State.TakingOrder:
+                //StartCoroutine(Wait(1));
                 foodMachine = currentCustomer.foodMachine.transform;
-                MoveTo(foodMachine);
+                //MoveTo(foodMachine);
+                StartCoroutine(WaitThenMove(1, foodMachine));
                 break;
             case State.Serving:
-                MoveTo(tableOrder);
+                //MoveTo(tableOrder);
+                //StopAllCoroutines();
+                //StopCoroutine(WaitThenMove(1, tableOrder));
+                //StopCoroutine(s);
+                StartCoroutine(WaitThenMove(1, tableOrder));
                 break;
             case State.GettingPaid://temporary
                 state++;
@@ -88,33 +96,46 @@ public class WorkerScript : Person
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Worker Trigger" + collision.name);
+        //Debug.Log("Worker Trigger" + collision.name);
         //check parent of collision object
-        if(state==State.Idle)
-        {
-            return;
-        }
-        if (collision.transform.parent.name.Contains("TableSlot") && state == State.GoingToTakeOrder)
-        {
-            state++;
-        }
-        else if (collision.transform.parent.name == foodMachine.transform.name && state == State.TakingOrder)//"FoodMachine"
-        {
-            state++;
-        }
-        else if (collision.transform.parent.name.Contains("TableSlot") && state == State.Serving)
-        {
-            state++;
-            EndOrder();
-        }
+        
+        CollisionActions(collision);
     }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
         //if the worker is already inside their tableslot don't try to re-enter the collider
-        if (collision.transform.parent.name.Contains("TableSlot") && state == State.GoingToTakeOrder)
+        
+        CollisionActions(collision);
+    }
+    void CollisionActions(Collider2D collision)
+    {
+        //Debug.Log("Worker Collision State");
+        if (state == State.Idle)
+        {
+            return;
+        }
+        if ( state == State.GoingToTakeOrder)
+        {
+            if(collision.transform.parent.name.Contains("TableSlot") )
+                state++;
+        }
+        else if ( state == State.TakingOrder)
+        {
+            //StopAllCoroutines();
+            //check only after a foodmachine has been assigned
+            if (foodMachine == null)
+                return;
+            //Debug.Log("Worker collision: " + collision.name );
+            //Debug.Log("Worker collision parent: " + collision.transform.parent.name );
+            //Debug.Log("food machine name parent: " + foodMachine.transform.name );
+            if(collision.transform.parent.name == foodMachine.transform.name )
+                state++;
+        }
+        else if (collision.transform.parent.name.Contains("TableSlot") && state == State.Serving)
         {
             state++;
+            EndOrder();
         }
     }
 
