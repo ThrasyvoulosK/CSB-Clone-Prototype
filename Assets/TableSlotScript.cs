@@ -5,6 +5,7 @@ using UnityEngine;
 public class TableSlotScript : MonoBehaviour
 {
     public bool slotTaken = false;
+    public CustomerScript customer;
     // Start is called before the first frame update
     void Start()
     {

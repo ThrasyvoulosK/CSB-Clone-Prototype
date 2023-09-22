@@ -25,5 +25,6 @@ public class SpawnScript : MonoBehaviour
     void Spawn()
     {
         newCustomer = (GameObject)Instantiate(customer, transform);
+        newCustomer.name += transform.name;
     }
 }

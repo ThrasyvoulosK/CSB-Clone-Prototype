@@ -31,6 +31,23 @@ public class CustomerScript : Person
 
         tableScript = FindAnyObjectByType<TableScript>();
         FindTable();
+        CheckTable();
+    }
+
+    private void CheckTable()
+    {
+        if(seatTaken.slotTaken==true)
+        {
+            if (seatTaken.customer.transform.parent.name == transform.parent.name)
+            {
+                Debug.Log("Seat Assigned Correctly");
+            }
+            else
+            {
+                Debug.Log("Wrong Seat Assigned to " + seatTaken.customer.transform.parent.name);
+                FindTable();
+            }
+        }
     }
 
     // Update is called once per frame
@@ -49,6 +66,7 @@ public class CustomerScript : Person
                 break;
             case State.GoingToOrder:
                 //FindTable();
+                CheckTable();
                 MoveTo(tableOrder);
                 break;
             case State.Ordering:
@@ -159,6 +177,7 @@ public class CustomerScript : Person
             {
                 tableOrder = tableSlot.transform.Find("CustomerPosition");
                 tableSlot.slotTaken = true;
+                tableSlot.customer = GetComponent<CustomerScript>();
                 seatTaken = tableSlot;
                 Debug.Log("Seat taken " + tableSlot.transform.name);
                 return;
