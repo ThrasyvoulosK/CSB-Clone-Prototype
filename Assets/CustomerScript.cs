@@ -21,6 +21,8 @@ public class CustomerScript : Person
 
     public MachineScript foodMachine;
 
+    MoneyScript moneyScript;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -32,6 +34,8 @@ public class CustomerScript : Person
         tableScript = FindAnyObjectByType<TableScript>();
         FindTable();
         CheckTable();
+
+        moneyScript = FindAnyObjectByType<MoneyScript>();
     }
 
     private void CheckTable()
@@ -74,6 +78,7 @@ public class CustomerScript : Person
                 Order();
                 break;
             case State.Eating:
+                moneyScript.money += 1;
                 state = State.Leaving;//temporary
                 break;
             case State.Leaving:
