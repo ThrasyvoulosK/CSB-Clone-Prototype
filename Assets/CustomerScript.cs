@@ -113,7 +113,7 @@ public class CustomerScript : Person
             {
                 //set worker's tableslot
                 //worker.tableOrder= seatTaken.transform.parent.transform.Find("WorkerPosition");
-                worker.tableOrder = seatTaken.transform;
+                worker.tableOrder = seatTaken.transform.Find("WorkerPosition");
                 Debug.Log("customer seat " + seatTaken.name);
                 Debug.Log("seat parent" + seatTaken.transform.parent.name);
                 Debug.Log("worker seat " + worker.tableOrder.name);

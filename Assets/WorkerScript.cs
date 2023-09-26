@@ -117,7 +117,9 @@ public class WorkerScript : Person
         }
         if ( state == State.GoingToTakeOrder)
         {
-            if(collision.transform.parent.name.Contains("TableSlot") )
+            Debug.Log(collision.transform + " "+tableOrder);
+            //if(collision.transform.parent.name.Contains("TableSlot") )
+            if(collision.transform==tableOrder)
                 state++;
         }
         else if ( state == State.TakingOrder)
@@ -132,7 +134,8 @@ public class WorkerScript : Person
             if(collision.transform.parent.name == foodMachine.transform.name )
                 state++;
         }
-        else if (collision.transform.parent.name.Contains("TableSlot") && state == State.Serving)
+        //else if (collision.transform.parent.name.Contains("TableSlot") && state == State.Serving)
+        else if (collision.transform==tableOrder && state == State.Serving)
         {
             state++;
             EndOrder();
