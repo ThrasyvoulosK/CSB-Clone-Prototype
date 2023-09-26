@@ -52,7 +52,7 @@ public class WorkerScript : Person
                 break;
             case State.TakingOrder:
                 //StartCoroutine(Wait(1));
-                foodMachine = currentCustomer.foodMachine.transform;
+                foodMachine = currentCustomer.foodMachine.transform.Find("WorkerPosition");
                 //MoveTo(foodMachine);
                 StartCoroutine(WaitThenMove(1, foodMachine));
                 break;
@@ -131,7 +131,7 @@ public class WorkerScript : Person
             //Debug.Log("Worker collision: " + collision.name );
             //Debug.Log("Worker collision parent: " + collision.transform.parent.name );
             //Debug.Log("food machine name parent: " + foodMachine.transform.name );
-            if(collision.transform.parent.name == foodMachine.transform.name )
+            if(collision.transform.parent.name == foodMachine.transform.parent.name )
                 state++;
         }
         //else if (collision.transform.parent.name.Contains("TableSlot") && state == State.Serving)
